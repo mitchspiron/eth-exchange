@@ -1,5 +1,6 @@
 Creating and Deploying an Ethereum Smart Contract Using Truffle
-Prerequisites
+
+    Prerequisites:
 
     Install Node.js and npm
     Install Ganache (https://archive.trufflesuite.com/ganache/)
