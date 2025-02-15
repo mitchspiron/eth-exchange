@@ -10,23 +10,23 @@ Prerequisites
 
 1. Initialize the Truffle Project
 
-    truffle init
+        truffle init
 
 2. Generate a Smart Contract
 
-    truffle create contract <YourContractName>
+        truffle create contract <YourContractName>
 
 3. Compile the Contract
 
-    truffle compile
+        truffle compile
 
 4. Deploy the Contract
 
-    truffle migrate
+        truffle migrate
 
 5. Verify the Deployment
 
-    truffle console
+        truffle console
 
 ⚠️ Note:
 Before deploying, make sure to start Ganache first.
