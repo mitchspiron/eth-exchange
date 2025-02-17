@@ -10903,9 +10903,7 @@
   "ast": {
     "absolutePath": "project:/contracts/Transactions.sol",
     "exportedSymbols": {
-      "Transactions": [
-        95
-      ]
+      "Transactions": [95]
     },
     "id": 96,
     "license": "UNLICENSED",
@@ -10913,12 +10911,7 @@
     "nodes": [
       {
         "id": 1,
-        "literals": [
-          "solidity",
-          "^",
-          "0.8",
-          ".28"
-        ],
+        "literals": ["solidity", "^", "0.8", ".28"],
         "nodeType": "PragmaDirective",
         "src": "40:24:0"
       },
@@ -10930,9 +10923,7 @@
         "contractKind": "contract",
         "fullyImplemented": true,
         "id": 95,
-        "linearizedBaseContracts": [
-          95
-        ],
+        "linearizedBaseContracts": [95],
         "name": "Transactions",
         "nameLocation": "77:12:0",
         "nodeType": "ContractDefinition",
@@ -11348,9 +11339,7 @@
                 "pathNode": {
                   "id": 31,
                   "name": "TransferStruct",
-                  "nameLocations": [
-                    "439:14:0"
-                  ],
+                  "nameLocations": ["439:14:0"],
                   "nodeType": "IdentifierPath",
                   "referencedDeclaration": 30,
                   "src": "439:14:0"
@@ -12009,9 +11998,7 @@
                       "pathNode": {
                         "id": 78,
                         "name": "TransferStruct",
-                        "nameLocations": [
-                          "892:14:0"
-                        ],
+                        "nameLocations": ["892:14:0"],
                         "nodeType": "IdentifierPath",
                         "referencedDeclaration": 30,
                         "src": "892:14:0"
@@ -12126,9 +12113,7 @@
         "scope": 96,
         "src": "68:999:0",
         "usedErrors": [],
-        "usedEvents": [
-          17
-        ]
+        "usedEvents": [17]
       }
     ],
     "src": "40:1027:0"

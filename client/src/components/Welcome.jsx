@@ -1,13 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { WalletIcon, CopyIcon, ExternalLinkIcon } from "lucide-react";
 import Motif from "../assets/img/motif.gif";
 import Motif2 from "../assets/img/motif2.jpg";
+import { TransactionContext } from "../context/TransactionContext";
+import Loader from "./Loader";
 
 const Welcome = () => {
-  const [address, setAddress] = useState("");
-  const [amount, setAmount] = useState("");
-  const [keywords, setKeywords] = useState("");
-  const [message, setMessage] = useState("");
+  const {
+    connectWallet,
+    currentAccount,
+    formData,
+    sendTransaction,
+    handleChange,
+  } = useContext(TransactionContext);
+
+  const handleSubmit = (e) => {
+    const { addressTo, amount, keyword, message } = formData;
+    console.log({ addressTo, amount, keyword, message });
+    e.preventDefault();
+
+    if (!addressTo || !amount || !keyword || !message) return;
+
+    sendTransaction();
+  };
+
+  //console.log(connectWallet);
 
   return (
     <div
@@ -50,12 +67,18 @@ const Welcome = () => {
               </p>
             </div>
             <div className="flex items-start gap-4">
-              <button className="group relative px-8 py-4 bg-white text-black rounded-xl font-medium transition-all hover:bg-gray-200 active:scale-[0.98]">
-                <span className="flex items-center gap-3">
-                  <WalletIcon className="w-5 h-5" />
-                  Connect MetaMask
-                </span>
-              </button>
+              {!currentAccount && (
+                <button
+                  type="button"
+                  onClick={connectWallet}
+                  className="group relative px-8 py-4 bg-white text-black rounded-xl font-medium transition-all hover:bg-gray-200 active:scale-[0.98]"
+                >
+                  <span className="flex items-center gap-3">
+                    <WalletIcon className="w-5 h-5" />
+                    Connect MetaMask
+                  </span>
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -149,8 +172,8 @@ const Welcome = () => {
                 <div>
                   <input
                     type="text"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
+                    name="addressTo"
+                    onChange={handleChange}
                     className="w-full bg-black border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-white/50"
                     placeholder="Recipient Address (0x...)"
                   />
@@ -160,53 +183,57 @@ const Welcome = () => {
                   <div>
                     <input
                       type="number"
-                      value={amount}
-                      onChange={(e) => setAmount(e.target.value)}
+                      step="0.0001"
+                      name="amount"
+                      onChange={handleChange}
                       className="w-full bg-black border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-white/50"
                       placeholder="Amount (ETH)"
-                      step="0.0001"
                       min="0"
                     />
                   </div>
 
                   <div>
-                    <select
-                      value={keywords}
-                      onChange={(e) => setKeywords(e.target.value)}
+                    <input
+                      type="text"
+                      name="keyword"
+                      onChange={handleChange}
                       className="w-full bg-black border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-white/50"
-                    >
-                      <option value="">Select Network</option>
-                      <option value="ethereum">Ethereum</option>
-                      <option value="polygon">Polygon</option>
-                      <option value="optimism">Optimism</option>
-                    </select>
+                      placeholder="Keyword"
+                    />
                   </div>
                 </div>
 
                 <div>
                   <textarea
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
+                    name="message"
+                    onChange={handleChange}
                     className="w-full bg-black border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-white/50 resize-none"
                     placeholder="Transaction Note (optional)"
                     rows={2}
                   />
                 </div>
 
-                <div className="flex justify-between pt-2">
-                  <button
-                    type="button"
-                    className="px-4 py-2 text-sm text-gray-400 hover:text-white transition-colors"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-4 py-2 bg-white text-black rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors"
-                  >
-                    Send Transaction
-                  </button>
-                </div>
+                {false ? (
+                  <div className="flex justify-center">
+                    <Loader />
+                  </div>
+                ) : (
+                  <div className="flex justify-between pt-2">
+                    <button
+                      type="button"
+                      className="px-4 py-2 text-sm text-gray-400 hover:text-white transition-colors"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleSubmit}
+                      className="px-4 py-2 bg-white text-black rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors"
+                    >
+                      Send Transaction
+                    </button>
+                  </div>
+                )}
               </form>
             </div>
           </div>
