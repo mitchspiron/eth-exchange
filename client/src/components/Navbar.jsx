@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { WalletIcon, Menu, X } from "lucide-react";
+import { TransactionContext } from "../context/TransactionContext";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { connectWallet, logout, currentAccount } =
+    useContext(TransactionContext);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-black/50 backdrop-blur-sm border-b border-gray-800">
@@ -11,7 +14,7 @@ const Navbar = () => {
           {/* Logo */}
           <div className="flex items-center">
             <a href="#" className="text-xl font-bold text-white">
-            ETHSENDER
+              ETHSENDER
             </a>
           </div>
 
@@ -51,12 +54,30 @@ const Navbar = () => {
 
           {/* Connect Wallet Button */}
           <div className="hidden md:flex items-center space-x-4">
-            <button className="group relative px-4 py-2 bg-white text-black rounded-xl font-medium transition-all hover:bg-gray-200 active:scale-[0.98]">
-              <span className="flex items-center gap-2">
-                <WalletIcon className="w-4 h-4" />
-                Connect Wallet
-              </span>
-            </button>
+            {!currentAccount && (
+              <button
+                type="button"
+                onClick={connectWallet}
+                className="group relative px-4 py-2 bg-white text-black rounded-xl font-medium transition-all hover:bg-gray-200 active:scale-[0.98]"
+              >
+                <span className="flex items-center gap-2">
+                  <WalletIcon className="w-4 h-4" />
+                  Connect Wallet
+                </span>
+              </button>
+            )}
+            {currentAccount && (
+              <button
+                type="button"
+                onClick={logout}
+                className="group relative px-4 py-2 bg-white text-black rounded-xl font-medium transition-all hover:bg-gray-200 active:scale-[0.98]"
+              >
+                <span className="flex items-center gap-2">
+                  <WalletIcon className="w-4 h-4" />
+                  Logout
+                </span>
+              </button>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -109,12 +130,30 @@ const Navbar = () => {
                 Contact
               </a>
               <div className="pt-2">
-                <button className="w-full px-4 py-2 bg-white text-black rounded-xl font-medium transition-all hover:bg-gray-200 active:scale-[0.98]">
-                  <span className="flex items-center justify-center gap-2">
-                    <WalletIcon className="w-4 h-4" />
-                    Connect Wallet
-                  </span>
-                </button>
+                {!currentAccount && (
+                  <button
+                    type="button"
+                    onClick={connectWallet}
+                    className="w-full px-4 py-2 bg-white text-black rounded-xl font-medium transition-all hover:bg-gray-200 active:scale-[0.98]"
+                  >
+                    <span className="flex items-center justify-center gap-2">
+                      <WalletIcon className="w-4 h-4" />
+                      Connect Wallet
+                    </span>
+                  </button>
+                )}
+                {currentAccount && (
+                  <button
+                    type="button"
+                    onClick={logout}
+                    className="w-full px-4 py-2 bg-white text-black rounded-xl font-medium transition-all hover:bg-gray-200 active:scale-[0.98]"
+                  >
+                    <span className="flex items-center justify-center gap-2">
+                      <WalletIcon className="w-4 h-4" />
+                      Logout
+                    </span>
+                  </button>
+                )}
               </div>
             </div>
           </div>

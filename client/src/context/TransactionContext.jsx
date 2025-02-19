@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Web3 from "web3";
 import { ethers } from "ethers";
 import { contractABI, contractAddress } from "../utils/constants";
+import { useDisconnect } from "wagmi";
 
 export const TransactionContext = React.createContext();
 
@@ -40,6 +41,8 @@ export const TransactionProvider = ({ children }) => {
     localStorage.getItem("transactionCount")
   );
   const [transactions, setTransactions] = useState([]);
+
+  const { disconnect } = useDisconnect();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -86,6 +89,8 @@ export const TransactionProvider = ({ children }) => {
       if (!ethereum) return alert("Please, install Metamask!");
 
       const accounts = await ethereum.request({ method: "eth_accounts" });
+
+      console.log("Account", accounts);
 
       if (accounts.length) {
         setCurrentAccount(accounts[0]);
@@ -142,6 +147,26 @@ export const TransactionProvider = ({ children }) => {
       console.log(error);
 
       throw new Error("No ethereum object.");
+    }
+  };
+
+  const logout = async () => {
+    try {
+      if (ethereum) {
+        disconnect();
+
+        // Nettoyage de votre état existant
+        setCurrentAccount("");
+        localStorage.removeItem("transactionCount");
+        setTransactionCount(null);
+        setTransactions([]);
+        setFormData({ addressTo: "", amount: "", keyword: "", message: "" });
+        window.location.reload();
+      } else {
+        console.log("Please install MetaMask to use this application.");
+      }
+    } catch (error) {
+      console.error("Error logging out:", error);
     }
   };
 
@@ -207,6 +232,7 @@ export const TransactionProvider = ({ children }) => {
     <TransactionContext.Provider
       value={{
         connectWallet,
+        logout,
         currentAccount,
         currentBalance,
         formData,
