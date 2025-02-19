@@ -90,8 +90,6 @@ export const TransactionProvider = ({ children }) => {
 
       const accounts = await ethereum.request({ method: "eth_accounts" });
 
-      console.log("Account", accounts);
-
       if (accounts.length) {
         setCurrentAccount(accounts[0]);
 
@@ -155,7 +153,6 @@ export const TransactionProvider = ({ children }) => {
       if (ethereum) {
         disconnect();
 
-        // Nettoyage de votre état existant
         setCurrentAccount("");
         localStorage.removeItem("transactionCount");
         setTransactionCount(null);
