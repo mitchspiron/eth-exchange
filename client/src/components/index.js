@@ -6,3 +6,4 @@ export { default as Welcome } from "./Welcome";
 export { default as Transactions } from "./Transactions";
 export { default as SecurityTips } from "./SecurityTips";
 export { default as CryptoConverter } from "./CryptoConverter";
+export { default as Cta } from "./Cta";

@@ -1,30 +1,29 @@
 import React, { useState, useContext } from "react";
 import { WalletIcon, CopyIcon, ExternalLinkIcon } from "lucide-react";
 import Motif from "../assets/img/motif.gif";
-import Motif2 from "../assets/img/motif2.jpg";
 import { TransactionContext } from "../context/TransactionContext";
 import Loader from "./Loader";
+import { shortenAddress } from "../utils/shortenAddress";
 
 const Welcome = () => {
   const {
     connectWallet,
     currentAccount,
+    currentBalance,
     formData,
     sendTransaction,
     handleChange,
+    isLoading
   } = useContext(TransactionContext);
 
   const handleSubmit = (e) => {
     const { addressTo, amount, keyword, message } = formData;
-    console.log({ addressTo, amount, keyword, message });
     e.preventDefault();
 
     if (!addressTo || !amount || !keyword || !message) return;
 
     sendTransaction();
   };
-
-  //console.log(connectWallet);
 
   return (
     <div
@@ -91,37 +90,46 @@ const Welcome = () => {
               <div className="h-full flex flex-col justify-between">
                 <div className="flex items-start justify-between space-x-4">
                   <div className="text-xl font-semibold tracking-tight">
-                    SUPERCOMPANY
+                    ETHSENDER
                   </div>
                   <div className="inline-flex flex-col items-center justify-center">
                     <svg
                       className="h-8 w-8"
                       width="24"
                       height="24"
-                      strokeWidth="1.5"
-                      viewBox="0 0 24 24"
-                      fill="none"
                       xmlns="http://www.w3.org/2000/svg"
+                      aria-label="Ethereum"
+                      role="img"
+                      viewBox="0 0 512 512"
+                      fill="#000000"
                     >
-                      <path
-                        d="M2 15V9C2 5.68629 4.68629 3 8 3H16C19.3137 3 22 5.68629 22 9V15C22 18.3137 19.3137 21 16 21H8C4.68629 21 2 18.3137 2 15Z"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                      ></path>
-                      <path
-                        d="M13 15.5V12.7M15.8571 12.7C16.5714 12.7 18 12.7 18 10.6C18 8.5 16.5714 8.5 15.8571 8.5L13 8.5V12.7M15.8571 12.7C14.7143 12.7 13.4762 12.7 13 12.7M15.8571 12.7L18 15.5"
-                        stroke="currentColor"
+                      <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                      <g
+                        id="SVGRepo_tracerCarrier"
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                      ></path>
-                      <path
-                        d="M11 8.5L8 15.5L5 8.5"
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      ></path>
+                      ></g>
+                      <g id="SVGRepo_iconCarrier">
+                        <rect
+                          width="512"
+                          height="512"
+                          rx="15%"
+                          fill="#ffffff"
+                        ></rect>
+                        <path fill="#3C3C3B" d="m256 362v107l131-185z"></path>
+                        <path
+                          fill="#343434"
+                          d="m256 41l131 218-131 78-132-78"
+                        ></path>
+                        <path
+                          fill="#8C8C8C"
+                          d="m256 41v158l-132 60m0 25l132 78v107"
+                        ></path>
+                        <path fill="#141414" d="m256 199v138l131-78"></path>
+                        <path fill="#393939" d="m124 259l132-60v138"></path>
+                      </g>
                     </svg>
-                    <div className="font-semibold text-white">wallet</div>
+                    <div className="font-semibold text-white">ethereum</div>
                   </div>
                 </div>
 
@@ -142,13 +150,17 @@ const Welcome = () => {
                     balance
                   </div>
                   <div className="space-y-2">
-                    <div className="text-3xl font-bold">2.45 ETH</div>
+                    <div className="text-3xl font-bold">
+                      {currentBalance ? currentBalance : "XXX"} ETH
+                    </div>
                     <div className="text-gray-400">≈ $4,578.34 USD</div>
                   </div>
 
                   <div className="flex mt-4 items-center gap-2 p-4 bg-gray-800/50 rounded-xl">
                     <div className="flex-1 font-mono text-sm text-gray-300 truncate">
-                      0x71C7...976F
+                      {currentAccount
+                        ? shortenAddress(currentAccount)
+                        : "My eth address ..."}
                     </div>
                     <button className="p-2 hover:bg-gray-700/50 rounded-lg transition-colors">
                       <CopyIcon className="w-4 h-4" />
@@ -213,7 +225,7 @@ const Welcome = () => {
                   />
                 </div>
 
-                {false ? (
+                {isLoading ? (
                   <div className="flex justify-center">
                     <Loader />
                   </div>

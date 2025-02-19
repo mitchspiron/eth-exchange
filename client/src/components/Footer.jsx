@@ -9,13 +9,13 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Company Info */}
           <div className="space-y-4">
-            <h3 className="text-xl font-bold text-white">SUPERCOMPANY</h3>
+            <h3 className="text-xl font-bold text-white">ETHSENDER</h3>
             <p className="text-gray-400 text-sm leading-relaxed">
               Experience next-generation cryptocurrency trading with our
               advanced platform. Connect your wallet and join thousands of
               traders worldwide.
             </p>
-           {/*  <div className="flex gap-4">
+            {/*  <div className="flex gap-4">
               <a
                 href="#"
                 className="text-gray-400 hover:text-white transition-colors"
@@ -163,7 +163,7 @@ const Footer = () => {
         <div className="mt-16 pt-8 border-t border-gray-800">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="text-gray-400 text-sm">
-              © 2024 SUPERCOMPANY. All rights reserved.
+              © {new Date().getFullYear()} ETHSENDER. All rights reserved.
             </div>
             <div className="flex gap-8 text-sm">
               <a

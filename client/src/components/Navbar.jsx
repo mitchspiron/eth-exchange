@@ -11,7 +11,7 @@ const Navbar = () => {
           {/* Logo */}
           <div className="flex items-center">
             <a href="#" className="text-xl font-bold text-white">
-              SUPERCOMPANY
+            ETHSENDER
             </a>
           </div>
 
