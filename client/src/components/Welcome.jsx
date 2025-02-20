@@ -1,9 +1,10 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { WalletIcon, CopyIcon, ExternalLinkIcon } from "lucide-react";
 import Motif from "../assets/img/motif.gif";
 import { TransactionContext } from "../context/TransactionContext";
 import Loader from "./Loader";
 import { shortenAddress } from "../utils/shortenAddress";
+import gsap from "gsap";
 
 const Welcome = () => {
   const {
@@ -13,7 +14,7 @@ const Welcome = () => {
     formData,
     sendTransaction,
     handleChange,
-    isLoading
+    isLoading,
   } = useContext(TransactionContext);
 
   const handleSubmit = (e) => {
@@ -25,9 +26,32 @@ const Welcome = () => {
     sendTransaction();
   };
 
+  const welcomeRef = useRef(null);
+  const leftSectionRef = useRef(null);
+  const rightSectionRef = useRef(null);
+  useEffect(() => {
+    const tl = gsap.timeline({ delay: 0.5 });
+    tl.from(leftSectionRef.current, {
+      opacity: 0,
+      x: -50,
+      duration: 1,
+      ease: "power3.out",
+    }).from(
+      rightSectionRef.current,
+      {
+        opacity: 0,
+        x: 50,
+        duration: 1,
+        ease: "power3.out",
+      },
+      "-=0.5"
+    );
+  }, []);
+
   return (
     <div
-      className="relative min-h-screen text-white overflow-hidden pt-20" // Ajout de pt-20 pour compenser la navbar
+      ref={welcomeRef}
+      className="relative min-h-screen text-white overflow-hidden pt-20"
       style={{
         backgroundImage: `url(${Motif})`,
       }}
@@ -50,8 +74,7 @@ const Welcome = () => {
       ></div>
 
       <div className="relative min-h-[calc(100vh-5rem)] flex flex-col lg:flex-row max-w-7xl mx-auto px-8 py-12">
-        {/* Left Section - Title and Description */}
-        <div className="w-full lg:w-1/2 flex items-center">
+        <div ref={leftSectionRef} className="w-full lg:w-1/2 flex items-center">
           <div className="space-y-8 lg:pr-16">
             <div className="space-y-6">
               <h1 className="text-4xl lg:text-6xl font-bold leading-tight">
@@ -82,9 +105,10 @@ const Welcome = () => {
           </div>
         </div>
 
-        {/* Right Section - Card and Form */}
-        <div className="w-full lg:w-1/2 flex flex-col justify-center space-y-8 mt-12 lg:mt-0">
-          {/* Card */}
+        <div
+          ref={rightSectionRef}
+          className="w-full lg:w-1/2 flex flex-col justify-center space-y-8 mt-12 lg:mt-0"
+        >
           <div className="mx-auto w-full max-w-sm">
             <div className="bg-gradient-to-tl from-gray-900 to-gray-800 text-white h-56 w-full p-6 rounded-xl shadow-md">
               <div className="h-full flex flex-col justify-between">
@@ -174,7 +198,6 @@ const Welcome = () => {
             </div>
           </div>
 
-          {/* Form */}
           <div className="mx-auto w-full max-w-sm">
             <div className="border border-gray-900 rounded-xl shadow-xl p-6">
               <h3 className="text-lg font-semibold mb-4">

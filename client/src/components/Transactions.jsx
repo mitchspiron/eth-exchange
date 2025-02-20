@@ -1,16 +1,55 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { ChevronDown, ChevronUp, SearchX } from "lucide-react";
 import Cta from "./Cta";
 import { TransactionContext } from "../context/TransactionContext";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Transactions = () => {
-  // Example transactions data
   const { currentAccount, transactions } = useContext(TransactionContext);
-
-  // State to track which accordion items are open
   const [openItems, setOpenItems] = useState({});
+  const sectionRef = useRef(null);
+  const transactionRefs = useRef([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  // Toggle accordion item
+  const sortedTransactions = [...transactions].sort((a, b) => {
+    return new Date(b.timestamp) - new Date(a.timestamp);
+  });
+
+  const filteredTransactions = sortedTransactions.filter((tx) => {
+    if (searchTerm === "") return true;
+
+    const searchLower = searchTerm.toLowerCase();
+    return (
+      tx.addressTo.toLowerCase().includes(searchLower) ||
+      tx.keyword.toLowerCase().includes(searchLower)
+    );
+  });
+
+  useEffect(() => {
+    if (filteredTransactions.length > 0) {
+      const elements = transactionRefs.current;
+      gsap.fromTo(
+        elements,
+        { opacity: 0, x: -100 },
+        {
+          opacity: 1,
+          x: 0,
+          stagger: 0.2,
+          duration: 2,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 80%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+    }
+  }, [filteredTransactions]);
+
   const toggleItem = (id) => {
     setOpenItems((prev) => ({
       ...prev,
@@ -19,7 +58,10 @@ const Transactions = () => {
   };
 
   return (
-    <div className="w-full bg-black/50 backdrop-blur-sm border-gray-800">
+    <div
+      ref={sectionRef}
+      className="w-full bg-black/50 backdrop-blur-sm border-gray-800"
+    >
       {!currentAccount ? (
         <Cta />
       ) : (
@@ -31,29 +73,26 @@ const Transactions = () => {
             <div className="flex gap-4">
               <input
                 type="text"
-                placeholder="Search transactions..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search transaction"
                 className="px-4 py-2 bg-black/40 border border-gray-800 rounded-lg text-sm text-white focus:outline-none focus:ring-1 focus:ring-white/50"
               />
-              {/* <select className="px-4 py-2 bg-black/40 border border-gray-800 rounded-lg text-sm text-white focus:outline-none focus:ring-1 focus:ring-white/50">
-                <option value="all">All Time</option>
-                <option value="day">Last 24h</option>
-                <option value="week">Last Week</option>
-                <option value="month">Last Month</option>
-              </select> */}
             </div>
           </div>
 
-          {transactions.length == 0 && (
+          {filteredTransactions.length === 0 && (
             <div className="space-y-4">
               <div className="border border-gray-800 rounded-xl overflow-hidden bg-black/40">
                 <div className="p-6">
-                  <div className="flex flex-cols-2 lg:flex-cols-4 gap-6 justify-center">
-                    {/* Address */}
-                    <div>
-                      <div className="font-mono text-xl text-white flex justify-center items-center">
-                        <SearchX />
-                        <span className="ml-3">No transaction found.</span>
-                      </div>
+                  <div className="flex justify-center">
+                    <div className="font-mono text-xl text-white flex items-center">
+                      <SearchX />
+                      <span className="ml-3">
+                        {searchTerm
+                          ? "No matching transactions found."
+                          : "No transactions found."}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -62,14 +101,14 @@ const Transactions = () => {
           )}
 
           <div className="space-y-4">
-            {transactions.map((tx, index) => (
+            {filteredTransactions.map((tx, index) => (
               <div
                 key={index}
-                className="border border-gray-800 rounded-xl overflow-hidden bg-black/40"
+                ref={(el) => (transactionRefs.current[index] = el)}
+                className="border border-gray-800 rounded-xl overflow-hidden bg-black/40 opacity-0"
               >
                 <div className="p-6">
                   <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                    {/* Address */}
                     <div>
                       <div className="text-sm text-gray-400 mb-1">Address</div>
                       <div className="font-mono text-white">
@@ -77,7 +116,6 @@ const Transactions = () => {
                       </div>
                     </div>
 
-                    {/* Date & Time */}
                     <div>
                       <div className="text-sm text-gray-400 mb-1">
                         Date & Time
@@ -85,20 +123,16 @@ const Transactions = () => {
                       <div className="text-white">{tx.timestamp}</div>
                     </div>
 
-                    {/* Amount */}
                     <div>
                       <div className="text-sm text-gray-400 mb-1">Amount</div>
                       <div>
                         <span className="text-white font-medium">
                           {tx.amount} ETH
                         </span>
-                        <span className="text-gray-400 ml-2">
-                          {/*  (${tx.amount.usd.toLocaleString()}) */} 5 USD
-                        </span>
+                        <span className="text-gray-400 ml-2">5 USD</span>
                       </div>
                     </div>
 
-                    {/* Keywords */}
                     <div>
                       <div className="text-sm text-gray-400 mb-1">Keywords</div>
                       <div className="flex gap-2 flex-wrap">
@@ -109,13 +143,12 @@ const Transactions = () => {
                     </div>
                   </div>
 
-                  {/* Accordion Button */}
                   <button
-                    onClick={() => toggleItem(tx.id)}
+                    onClick={() => toggleItem(index)}
                     className="flex items-center gap-2 text-sm text-gray-400 hover:text-white mt-4 transition-colors"
                   >
                     <span>View Message</span>
-                    {openItems[tx.id] ? (
+                    {openItems[index] ? (
                       <ChevronUp className="w-4 h-4" />
                     ) : (
                       <ChevronDown className="w-4 h-4" />
@@ -123,8 +156,7 @@ const Transactions = () => {
                   </button>
                 </div>
 
-                {/* Accordion Content */}
-                {openItems[tx.id] && (
+                {openItems[index] && (
                   <div className="px-6 pb-6 text-gray-300">
                     <div className="p-4 bg-white/5 rounded-lg">
                       {tx.message}

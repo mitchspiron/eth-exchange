@@ -1,6 +1,19 @@
 import React, { useContext, useState } from "react";
 import { WalletIcon, Menu, X } from "lucide-react";
 import { TransactionContext } from "../context/TransactionContext";
+import gsap from "gsap";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+
+gsap.registerPlugin(ScrollToPlugin);
+
+const handleScroll = (e, id) => {
+  e.preventDefault();
+  gsap.to(window, {
+    duration: 1.2,
+    scrollTo: `#${id}`,
+    ease: "power2.out",
+  });
+};
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -8,7 +21,7 @@ const Navbar = () => {
     useContext(TransactionContext);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-black/50 backdrop-blur-sm border-b border-gray-800">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-black/50 backdrop-blur-sm border-b border-gray-800  cursor-pointer">
       <div className="max-w-7xl mx-auto px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
@@ -21,31 +34,31 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             <a
-              href="#"
+              onClick={(e) => handleScroll(e, "welcome")}
               className="text-white hover:text-gray-300 transition-colors"
             >
               Home
             </a>
             <a
-              href="#"
+              onClick={(e) => handleScroll(e, "services")}
               className="text-gray-400 hover:text-white transition-colors"
             >
-              Features
+              Services
             </a>
             <a
-              href="#"
+              onClick={(e) => handleScroll(e, "transactions")}
               className="text-gray-400 hover:text-white transition-colors"
             >
-              Pricing
+              Transactions
             </a>
             <a
-              href="#"
+              onClick={(e) => handleScroll(e, "tips")}
               className="text-gray-400 hover:text-white transition-colors"
             >
-              About
+              Tips
             </a>
             <a
-              href="#"
+              onClick={(e) => handleScroll(e, "contact")}
               className="text-gray-400 hover:text-white transition-colors"
             >
               Contact
@@ -100,31 +113,31 @@ const Navbar = () => {
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-4 space-y-1 border-t border-gray-800">
               <a
-                href="#"
+                onClick={(e) => handleScroll(e, "welcome")}
                 className="block px-3 py-2 rounded-lg text-white bg-gray-800/50"
               >
                 Home
               </a>
               <a
-                href="#"
+                onClick={(e) => handleScroll(e, "services")}
                 className="block px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800/50 transition-colors"
               >
-                Features
+                Services
               </a>
               <a
-                href="#"
+                onClick={(e) => handleScroll(e, "transactions")}
                 className="block px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800/50 transition-colors"
               >
-                Pricing
+                Transactions
               </a>
               <a
-                href="#"
+                onClick={(e) => handleScroll(e, "tips")}
                 className="block px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800/50 transition-colors"
               >
-                About
+                Tips
               </a>
               <a
-                href="#"
+                onClick={(e) => handleScroll(e, "contact")}
                 className="block px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800/50 transition-colors"
               >
                 Contact

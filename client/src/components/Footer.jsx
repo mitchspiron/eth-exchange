@@ -1,4 +1,17 @@
 import React from "react";
+import gsap from "gsap";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+
+gsap.registerPlugin(ScrollToPlugin);
+
+const handleScroll = (e, id) => {
+  e.preventDefault();
+  gsap.to(window, {
+    duration: 1.2,
+    scrollTo: `#${id}`,
+    ease: "power2.out",
+  });
+};
 //import { GithubIcon, TwitterIcon, DiscordIcon } from "lucide-react";
 
 const Footer = () => {
@@ -6,7 +19,7 @@ const Footer = () => {
     <footer className="bg-black/50 backdrop-blur-sm border-t border-gray-800">
       <div className="max-w-7xl mx-auto px-8 py-16">
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 cursor-pointer">
           {/* Company Info */}
           <div className="space-y-4">
             <h3 className="text-xl font-bold text-white">ETHSENDER</h3>
@@ -37,7 +50,6 @@ const Footer = () => {
             </div> */}
           </div>
 
-          {/* Quick Links */}
           <div className="space-y-4">
             <h4 className="text-sm font-semibold text-gray-300 uppercase tracking-wider">
               Quick Links
@@ -45,7 +57,7 @@ const Footer = () => {
             <ul className="space-y-3">
               <li>
                 <a
-                  href="#"
+                  onClick={(e) => handleScroll(e, "welcome")}
                   className="text-gray-400 hover:text-white transition-colors"
                 >
                   Home
@@ -53,40 +65,23 @@ const Footer = () => {
               </li>
               <li>
                 <a
-                  href="#"
+                  onClick={(e) => handleScroll(e, "services")}
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  About Us
+                  Services
                 </a>
               </li>
               <li>
                 <a
-                  href="#"
+                  onClick={(e) => handleScroll(e, "transactions")}
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  Features
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-white transition-colors"
-                >
-                  Pricing
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-white transition-colors"
-                >
-                  Contact
+                  Transactions
                 </a>
               </li>
             </ul>
           </div>
 
-          {/* Support */}
           <div className="space-y-4">
             <h4 className="text-sm font-semibold text-gray-300 uppercase tracking-wider">
               Support
@@ -94,42 +89,18 @@ const Footer = () => {
             <ul className="space-y-3">
               <li>
                 <a
-                  href="#"
+                  onClick={(e) => handleScroll(e, "contact")}
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  Help Center
+                  Contact
                 </a>
               </li>
               <li>
                 <a
-                  href="#"
+                  onClick={(e) => handleScroll(e, "tips")}
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  Documentation
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-white transition-colors"
-                >
-                  API Reference
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-white transition-colors"
-                >
-                  Status Page
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-white transition-colors"
-                >
-                  Security
+                  Security tips
                 </a>
               </li>
             </ul>

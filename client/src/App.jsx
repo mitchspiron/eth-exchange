@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   Welcome,
   Footer,
@@ -5,20 +6,29 @@ import {
   Navbar,
   Services,
   SecurityTips,
-  CryptoConverter,
+  BackToTop,
 } from "./components";
 const App = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div className="min-h-screen bg-black">
       <Navbar />
-      <div className="gradient-bg-welcome">
+      <div id="welcome" className="gradient-bg-welcome">
         <Welcome />
       </div>
-      <Services />
-      <Transactions />
-      <SecurityTips />
-      {/* <CryptoConverter /> */}
-      <Footer />
+      <div id="services">
+        <Services />
+      </div>
+      <div id="transactions">
+        <Transactions />
+      </div>
+      <div id="tips">
+        <SecurityTips />
+      </div>
+      <Footer id="contact" />
+      <BackToTop/>
     </div>
   );
 };

@@ -1,17 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { ChevronDown, ChevronUp, Shield } from "lucide-react";
 import Motif3 from "../assets/img/motif3.jpg";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const SecurityTips = () => {
   const [openIndices, setOpenIndices] = useState([0]);
+  const faqRefs = useRef([]);
+
+  useEffect(() => {
+    faqRefs.current.forEach((faq, index) => {
+      if (faq) {
+        gsap.fromTo(
+          faq,
+          { opacity: 0, y: 50 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: faq,
+              start: "top 85%",
+              toggleActions: "play none none none",
+            },
+          }
+        );
+      }
+    });
+  }, []);
 
   const toggleIndex = (index) => {
-    setOpenIndices((prev) => {
-      if (prev.includes(index)) {
-        return prev.filter((i) => i !== index);
-      }
-      return [...prev, index];
-    });
+    setOpenIndices((prev) =>
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
+    );
   };
 
   const faqItems = [
@@ -45,11 +69,8 @@ const SecurityTips = () => {
   return (
     <div
       className="relative bg-black text-white py-24 overflow-hidden"
-      style={{
-        backgroundImage: `url(${Motif3})`,
-      }}
+      style={{ backgroundImage: `url(${Motif3})` }}
     >
-      {/* Background Pattern */}
       <div
         className="absolute inset-2 lg:inset-10"
         style={{
@@ -65,8 +86,6 @@ const SecurityTips = () => {
           backgroundPosition: "0 0, 0 0, 0 0, 0 0, 0 0",
         }}
       ></div>
-
-      {/* Gradient Overlay */}
       <div
         className="absolute inset-0"
         style={{
@@ -74,13 +93,10 @@ const SecurityTips = () => {
           pointerEvents: "none",
         }}
       />
-
-      {/* Floating Accent Elements */}
       <div className="absolute inset-0 overflow-hidden opacity-20">
         <div className="absolute -left-32 top-1/4 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
         <div className="absolute -right-32 top-3/4 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
       </div>
-
       <div className="relative max-w-7xl mx-auto px-8">
         <div className="text-center mb-16">
           <div className="flex justify-center mb-6">
@@ -93,11 +109,11 @@ const SecurityTips = () => {
             Essential guidelines to keep your crypto assets safe and secure
           </p>
         </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {faqItems.map((item, index) => (
             <div
               key={index}
+              ref={(el) => (faqRefs.current[index] = el)}
               className="group border border-gray-800/50 rounded-xl overflow-hidden transition-all duration-300 backdrop-blur-sm hover:border-gray-700 h-fit"
             >
               <button

@@ -1,22 +1,52 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { ArrowRight } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import CtaImg from "../assets/img/cta2.png";
 import { TransactionContext } from "../context/TransactionContext";
 
+gsap.registerPlugin(ScrollTrigger);
+
 const Cta = () => {
   const { connectWallet } = useContext(TransactionContext);
+  const leftSectionRef = useRef(null);
+  const rightSectionRef = useRef(null);
+
+  useEffect(() => {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: leftSectionRef.current,
+        start: "top 80%",
+        toggleActions: "play none none none",
+      },
+    });
+
+    tl.from(leftSectionRef.current, {
+      opacity: 0,
+      x: -50,
+      duration: 2,
+      ease: "power3.out",
+    }).from(
+      rightSectionRef.current,
+      {
+        opacity: 0,
+        x: 50,
+        duration: 2,
+        ease: "power3.out",
+      },
+      "-=0.5"
+    );
+  }, []);
+
   return (
     <div className="w-full backdrop-blur-sm py-16 md:py-20 overflow-hidden relative">
-      {/* Background glow effects - visible on all screen sizes */}
       <div className="absolute -right-24 top-3 w-64 md:w-96 h-64 md:h-96 bg-white/100 rounded-full blur-3xl opacity-20"></div>
       <div className="absolute right-1/2 md:-right-16 top-1/4 w-48 md:w-64 h-48 md:h-64 bg-white/15 rounded-full blur-3xl opacity-20"></div>
       <div className="absolute right-1/4 -bottom-20 w-56 md:w-80 h-56 md:h-80 bg-white/5 rounded-full blur-3xl opacity-25"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Flex container for desktop layout */}
         <div className="flex flex-col lg:flex-row items-start justify-between gap-10 relative">
-          {/* Text content - takes full width on mobile, constrained on desktop */}
-          <div className="w-full lg:max-w-xl z-10">
+          <div ref={leftSectionRef} className="w-full lg:max-w-xl z-10">
             <h3 className="text-sm uppercase text-gray-400 mb-3">
               Your Transactions
             </h3>
@@ -38,8 +68,10 @@ const Cta = () => {
             </button>
           </div>
 
-          {/* Image for desktop - positioned absolutely */}
-          <div className="hidden lg:block absolute right-0 bottom-0 w-1/2 h-full">
+          <div
+            ref={rightSectionRef}
+            className="hidden lg:block absolute right-0 bottom-0 w-1/2 h-full"
+          >
             <div className="w-full h-full relative">
               <div className="absolute right-0 bottom-0 overflow-hidden rounded-tl-3xl">
                 <img
@@ -51,8 +83,10 @@ const Cta = () => {
             </div>
           </div>
 
-          {/* Image for mobile - displays below text */}
-          <div className="w-full h-64 sm:h-80 mt-10 relative lg:hidden">
+          <div
+            ref={rightSectionRef}
+            className="w-full h-64 sm:h-80 mt-10 relative lg:hidden"
+          >
             <div className="absolute inset-0 rounded-tl-3xl overflow-hidden">
               <img
                 src={CtaImg}
